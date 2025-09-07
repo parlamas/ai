@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>horistics.ai — Where AI Learns to Think</title>
+  <meta name="description" content="The first AI built on Horistics: from mere description to true definition — and real problem‑solving.">
+  <meta property="og:title" content="horistics.ai — Where AI Learns to Think">
+  <meta property="og:description" content="The first AI built on Horistics: from mere description to true definition — and real problem‑solving.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://horistics.ai/">
+  <meta name="theme-color" content="#0a0a0a">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><text y='50%' x='50%' dominant-baseline='middle' text-anchor='middle' font-size='48'>ℋ</text></svg>">
+  <style>
+    /* ========== Minimal, dramatic, single-screen layout ========== */
+    :root {
+      --bg: #0a0a0a;
+      --fg: #f2f2f2;
+      --muted: #bdbdbd;
+      --accent: #7df9ff;
+      --accent-2: #9bff8b;
+      --maxw: 1100px;
+      --radius: 14px;
+      --shadow: 0 20px 60px rgba(0,0,0,0.45);
+    }
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Inter, Arial, sans-serif;
+      color: var(--fg);
+      background: radial-gradient(1000px 600px at 20% -10%, rgba(125,249,255,0.08), transparent 40%),
+                  radial-gradient(800px 500px at 110% 20%, rgba(155,255,139,0.07), transparent 40%),
+                  var(--bg);
+      line-height: 1.4;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+    a { color: inherit; text-decoration: none; }
+    .wrap {
+      min-height: 100%;
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+    }
+    header {
+      max-width: var(--maxw);
+      margin: 0 auto;
+      padding: 18px 22px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 700;
+      letter-spacing: .3px;
+      font-size: 1.05rem;
+    }
+    .brand-badge {
+      width: 34px; height: 34px; border-radius: 8px;
+      display: grid; place-items: center;
+      background: linear-gradient(135deg, rgba(125,249,255,0.25), rgba(155,255,139,0.22));
+      border: 1px solid rgba(255,255,255,0.12);
+    }
+    .brand-badge span { font-weight: 700; }
+    .nav { opacity: .9; font-size: .95rem; }
+    .nav a { opacity: .8; margin-left: 18px; }
+    .nav a:hover { opacity: 1; }
+    main {
+      max-width: var(--maxw);
+      margin: 0 auto;
+      padding: 42px 22px 24px;
+      display: grid;
+      gap: 28px;
+    }
+    .hero {
+      display: grid;
+      gap: 22px;
+      padding: clamp(20px, 4vw, 40px);
+      border: 1px solid rgba(255,255,255,0.12);
+      background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+    .kicker {
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: .14em;
+      font-size: .82rem;
+    }
+    h1 {
+      margin: 0;
+      font-size: clamp(2rem, 4.2vw + 1rem, 4.2rem);
+      line-height: 1.05;
+      letter-spacing: -0.02em;
+    }
+    .lede {
+      font-size: clamp(1.05rem, 1.2vw + .8rem, 1.35rem);
+      color: #e9e9e9;
+      max-width: 62ch;
+    }
+    .lede strong { color: #fff; }
+    .cta {
+      display: flex; gap: 14px; flex-wrap: wrap;
+      margin-top: 4px;
+    }
+    .btn {
+      padding: 12px 18px;
+      border-radius: 12px;
+      font-weight: 700;
+      border: 1px solid rgba(255,255,255,0.14);
+      background: rgba(255,255,255,0.04);
+      backdrop-filter: blur(6px);
+      cursor: pointer;
+      transition: transform .05s ease, background .2s ease, border-color .2s ease;
+    }
+    .btn:hover { transform: translateY(-1px); border-color: rgba(255,255,255,0.28); }
+    .btn-primary {
+      background: linear-gradient(135deg, rgba(125,249,255,0.18), rgba(155,255,139,0.18));
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 18px;
+    }
+    @media (min-width: 900px) {
+      .grid { grid-template-columns: 1.2fr .8fr; align-items: start; }
+    }
+    .card {
+      border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(255,255,255,0.03);
+      border-radius: var(--radius);
+      padding: 18px 18px 20px;
+    }
+    .card h2 {
+      margin: 6px 0 10px;
+      font-size: clamp(1.2rem, 1.4vw + .7rem, 2rem);
+      letter-spacing: -0.01em;
+    }
+    .list {
+      display: grid; gap: 10px; margin: 0; padding: 0; list-style: none;
+    }
+    .list li { color: #e8e8e8; }
+    .list li strong { color: #fff; }
+    .callout {
+      border-left: 3px solid var(--accent);
+      padding-left: 14px;
+      color: #eaeaea;
+    }
+    footer {
+      max-width: var(--maxw);
+      margin: 0 auto;
+      padding: 20px 22px 40px;
+      color: var(--muted);
+      font-size: .95rem;
+      display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap;
+    }
+    .thin { opacity: .85; }
+    .accent { color: var(--accent); }
+    .accent-2 { color: var(--accent-2); }
+    .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; }
+    .badge {
+      display: inline-block;
+      padding: 4px 8px;
+      border-radius: 999px;
+      font-size: .78rem;
+      border: 1px solid rgba(255,255,255,0.18);
+      background: rgba(255,255,255,0.04);
+      margin-top: 6px;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="brand" aria-label="horistics.ai">
+        <div class="brand-badge" aria-hidden="true"><span>ℋ</span></div>
+        <span>horistics.ai</span>
+      </div>
+      <nav class="nav" aria-label="primary">
+        <a href="#vision" class="thin">Vision</a>
+        <a href="#why" class="thin">Why Definitions</a>
+        <a href="#mission" class="thin">Mission</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="hero" id="top" aria-labelledby="hero-title">
+        <div class="kicker">First of its kind</div>
+        <h1 id="hero-title">For the first time, <span class="accent">AI will define</span> — not just describe.</h1>
+        <p class="lede">
+          Today’s AI mirrors language. It predicts, imitates, and summarizes — but it rarely <em>understands</em>.
+          <strong>Horistics</strong> changes this: a universal, semantics‑first framework that lets AI <strong>form definitions</strong>,
+          reason with them, and therefore <strong>solve real problems</strong>. To define is to think. To think is to solve.
+        </p>
+        <div class="cta">
+          <a class="btn btn-primary" href="mailto:hello@horistics.ai?subject=horistics.ai%20Waitlist&body=I%20want%20to%20join%20the%20waitlist.">Join the Waitlist</a>
+          <a class="btn" href="#vision">Learn More</a>
+        </div>
+        <span class="badge mono">Definitional AI • Universal Grammar • Problem‑Solving Intelligence</span>
+      </section>
+
+      <section class="grid" id="vision" aria-labelledby="vision-title">
+        <div class="card">
+          <h2 id="vision-title">The Breakthrough</h2>
+          <p class="callout"><strong>“To define is to think. To think is to solve.”</strong></p>
+          <ul class="list">
+            <li><strong>From description to definition:</strong> Horistics equips AI with universal, language‑independent categories (mood, diathesis, aspect, syntax) grounded in meaning.</li>
+            <li><strong>From patterns to principles:</strong> Instead of guessing the next word, AI can construct and test <em>definitions</em> — the basis of genuine reasoning.</li>
+            <li><strong>From mirroring to mastery:</strong> When AI can define problems precisely, it can chart solutions across languages and domains.</li>
+          </ul>
+        </div>
+
+        <div class="card" id="why" aria-labelledby="why-title">
+          <h2 id="why-title">Why Definitions Matter</h2>
+          <ul class="list">
+            <li><strong>Descriptions</strong> report what is observed. <strong>Definitions</strong> state what is.</li>
+            <li>Humans solve by defining first: justice → law; illness → medicine; energy → technology.</li>
+            <li>With Horistics, AI gains the same capacity: to originate, refine, and apply definitions to reality.</li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="grid" aria-labelledby="think-title">
+        <div class="card">
+          <h2 id="think-title">A Truly Thinking Machine</h2>
+          <ul class="list">
+            <li>Understands problems at their root through <strong>definitional analysis</strong>.</li>
+            <li>Translates meaning cleanly by mapping <strong>universal structures</strong> beneath every language.</li>
+            <li>Explains its reasoning with <strong>transparent categories</strong> instead of opaque statistics.</li>
+            <li>Accelerates education, research, diplomacy, and law with <strong>precise language</strong>.</li>
+          </ul>
+        </div>
+
+        <div class="card" id="mission" aria-labelledby="mission-title">
+          <h2 id="mission-title">Mission & Next Steps</h2>
+          <ul class="list">
+            <li><strong>Rebuild AI on meaning:</strong> semantics before syntax, definitions before data.</li>
+            <li><strong>Ship tools:</strong> definitional translators, pedagogical tutors, and explainable reasoning engines.</li>
+            <li><strong>Open partnerships:</strong> education, public interest, and research collaborators welcome.</li>
+          </ul>
+          <div class="cta" style="margin-top:8px">
+            <a class="btn btn-primary" href="mailto:hello@horistics.ai?subject=Partnership%20Inquiry%20—%20horistics.ai">Partner with Us</a>
+            <a class="btn" href="mailto:hello@horistics.ai?subject=Press%20Inquiry%20—%20horistics.ai">Press</a>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div>© <span id="year"></span> horistics.ai</div>
+      <div class="thin">Built on <span class="accent-2">Horistics</span> — the universal grammar of meaning.</div>
+    </footer>
+  </div>
+
+  <script>
+    // Lightweight enhancement: update year and enable smooth anchor scrolling
+    document.getElementById('year').textContent = new Date().getFullYear();
+    document.querySelectorAll('a[href^="#"]').forEach(a => {
+      a.addEventListener('click', e => {
+        const id = a.getAttribute('href').slice(1);
+        const el = document.getElementById(id);
+        if (el) {
+          e.preventDefault();
+          el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      });
+    });
+  </script>
+</body>
+</html>
