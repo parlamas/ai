@@ -319,37 +319,58 @@ To define is to think. To think is to solve.
     });
 
     // --- Daily Definitions: auto-number, progress, and day-of-week ---
-    <script>
-  // --- Daily Definitions: auto-number, progress, and day-of-week ---
+    
+
+  // --- Daily Definitions: auto-number, progress, and day-of-week (robust) ---
   (function () {
     const entries = document.querySelectorAll('#daily-defs .def-entry');
     const progressEl = document.getElementById('defs-progress');
 
-    // Auto-number sequentially in DOM order
+    // Safe ISO date parser -> Date (no timezone shifts)
+    function parseISODate(iso) {
+      if (!iso) return null;
+      // Accept "YYYY-MM-DD" (preferred)
+      const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(iso.trim());
+      if (!m) return null;
+      const y = +m[1], mo = +m[2], d = +m[3];
+      if (mo < 1 || mo > 12 || d < 1 || d > 31) return null;
+      // Construct in local time with given Y/M/D (avoids UTC shifts in formatting)
+      return new Date(y, mo - 1, d);
+    }
+
+    // Format: "Wednesday, September 10, 2025"
+    const fmtOpts = { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' };
+
     entries.forEach((el, i) => {
+      // 1) Auto-number
       const n = i + 1;
       const badge = el.querySelector('.entry-number');
       if (badge) badge.textContent = 'Entry ' + n;
 
-      // Add formatted day-of-week + date
-      const dateStr = el.getAttribute('data-date'); // Format: YYYY-MM-DD
-      if (dateStr) {
-        const dateObj = new Date(dateStr + 'T00:00:00');
-        const formattedDate = dateObj.toLocaleDateString('en-US', {
-          weekday: 'long',
-          month: 'long',
-          day: 'numeric',
-          year: 'numeric'
-        });
-        const dateEl = el.querySelector('.entry-date');
-        if (dateEl) dateEl.textContent = formattedDate;
+      // 2) Resolve date source: data-date -> <time datetime> -> existing <time> text
+      const timeEl = el.querySelector('time');
+      const dataAttr = el.getAttribute('data-date');
+      const timeAttr = timeEl?.getAttribute('datetime');
+      const fallbackText = timeEl?.textContent?.trim();
+      const raw = dataAttr || timeAttr || fallbackText;
+
+      // 3) Parse and render
+      const dateEl = el.querySelector('.entry-date');
+      if (raw && dateEl) {
+        const d = parseISODate(raw);
+        if (d && !isNaN(d.getTime())) {
+          dateEl.textContent = d.toLocaleDateString('en-US', fmtOpts);
+        } else {
+          // If parsing failed, don't blank it—show whatever we have
+          dateEl.textContent = fallbackText || raw;
+        }
       }
     });
 
-    // Progress (entries count out of 50)
+    // 3) Progress (entries count out of 50)
     if (progressEl) progressEl.textContent = `${entries.length}/50`;
 
-    // Fill missing prompts from data attribute if needed
+    // 4) Fill missing prompts from data attribute if needed
     entries.forEach(el => {
       const p = el.getAttribute('data-prompt');
       const span = el.querySelector('.entry-prompt');
@@ -357,6 +378,7 @@ To define is to think. To think is to solve.
     });
   })();
 </script>
+
 
   </script>
 </body>
