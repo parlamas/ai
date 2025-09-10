@@ -319,35 +319,51 @@ To define is to think. To think is to solve.
     });
 
     // --- Daily Definitions: auto-number, progress, and day-of-week ---
-    (function () {
-      const entries = document.querySelectorAll('#daily-defs .def-entry');
-      const progressEl = document.getElementById('defs-progress');
+    <script>
+  // --- Daily Definitions: auto-number, progress, and day-of-week ---
+  (function () {
+    const entries = document.querySelectorAll('#daily-defs .def-entry');
+    const progressEl = document.getElementById('defs-progress');
 
-      // Auto-number sequentially in DOM order
-      entries.forEach((el, i) => {
-        const n = i + 1;
-        const badge = el.querySelector('.entry-number');
-        if (badge) badge.textContent = 'Entry ' + n;
+    // Auto-number sequentially in DOM order
+    entries.forEach((el, i) => {
+      const n = i + 1;
+      const badge = el.querySelector('.entry-number');
+      if (badge) badge.textContent = 'Entry ' + n;
 
-        // Add day of week + date
-        const dateStr = el.getAttribute('data-date');
+      // Add formatted day-of-week + date
+      const dateStr = el.getAttribute('data-date'); // Format: YYYY-MM-DD
+      if (dateStr) {
         const dateObj = new Date(dateStr + 'T00:00:00');
-        const weekday = dateObj.toLocaleDateString('en-US', { weekday: 'long' });
-        const dateDisplay = `${weekday}, ${dateStr}`;
+        const formattedDate = dateObj.toLocaleDateString('en-US', {
+          weekday: 'long',
+          month: 'long',
+          day: 'numeric',
+          year: 'numeric'
+        });
         const dateEl = el.querySelector('.entry-date');
-        if (dateEl) dateEl.textContent = dateDisplay;
-      });
+        if (dateEl) dateEl.textContent = formattedDate;
+      }
+    });
 
-      // Progress (entries count out of 50)
-      if (progressEl) progressEl.textContent = `${entries.length}/50`;
+    // Progress (entries count out of 50)
+    if (progressEl) progressEl.textContent = `${entries.length}/50`;
 
-      // Fill missing prompts from data attribute if needed
-      entries.forEach(el => {
-        const p = el.getAttribute('data-prompt');
-        const span = el.querySelector('.entry-prompt');
-        if (p && span && !span.textContent.trim()) span.textContent = p;
-      });
-    })();
+    // Fill missing prompts from data attribute if needed
+    entries.forEach(el => {
+      const p = el.getAttribute('data-prompt');
+      const span = el.querySelector('.entry-prompt');
+      if (p && span && !span.textContent.trim()) span.textContent = p;
+    });
+  })();
+</script>
+
   </script>
 </body>
-</html>
+</html>const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+const today = new Date();
+const formattedDate = today.toLocaleDateString('en-US', options);
+
+console.log(formattedDate);
+// Example output: "Wednesday, September 10, 2025"
+
