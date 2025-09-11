@@ -511,23 +511,27 @@ fetch('https://api.countapi.xyz/hit/horistics.ai/visits')
   })();
 </script>
 
-
-  
-
-  <!-- Visit counter (temporary visual badge + console logging) -->
-<div id="visit-counter-badge" style="
-  position:fixed; right:10px; bottom:10px; z-index:9999;
-  background:#111; color:#fff; font:12px/1 system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-  padding:6px 8px; border:1px solid #333; border-radius:8px; opacity:.85; display:none;">
-  visits: <span id="visit-counter-value">—</span>
+<!-- Visible visit counter -->
+<div id="visit-counter" style="
+  position:fixed;
+  bottom:15px;
+  right:15px;
+  background:#007BFF;          /* Blue background */
+  color:white;
+  font-family:Arial, sans-serif;
+  font-size:14px;
+  padding:8px 12px;
+  border-radius:8px;
+  box-shadow:0 0 8px rgba(0,0,0,0.3);
+  z-index:9999;">
+  Visits: <span id="visit-counter-value">Loading...</span>
 </div>
 
 <script>
 (function () {
-  // 1) Prove the script is running
   console.log('[counter] script loaded');
 
-  // 2) Call CountAPI (auto-creates key if it doesn't exist)
+  // Free API for counting visits
   const endpoint = 'https://api.countapi.xyz/hit/horistics.ai/visits';
 
   fetch(endpoint, { cache: 'no-store' })
@@ -537,24 +541,16 @@ fetch('https://api.countapi.xyz/hit/horistics.ai/visits')
     })
     .then(data => {
       console.log('[counter] visit count:', data?.value);
-      // Show small badge so you can verify on iPhone too
-      const badge = document.getElementById('visit-counter-badge');
-      const valEl = document.getElementById('visit-counter-value');
-      if (badge && valEl) {
-        valEl.textContent = data?.value ?? 'n/a';
-        badge.style.display = 'inline-block';
-        // Auto-hide after 5s (remove this if you want it to stay)
-        setTimeout(() => { badge.style.display = 'none'; }, 5000);
+      const counterElement = document.getElementById('visit-counter-value');
+      if (counterElement) {
+        counterElement.textContent = data?.value ?? 'N/A';
       }
     })
     .catch(err => {
       console.error('[counter] error:', err);
-      // Briefly show error state
-      const badge = document.getElementById('visit-counter-badge');
-      if (badge) {
-        badge.textContent = 'counter error';
-        badge.style.display = 'inline-block';
-        setTimeout(() => { badge.style.display = 'none'; }, 5000);
+      const counterElement = document.getElementById('visit-counter-value');
+      if (counterElement) {
+        counterElement.textContent = 'Error';
       }
     });
 })();
