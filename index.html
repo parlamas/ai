@@ -511,51 +511,7 @@ fetch('https://api.countapi.xyz/hit/horistics.ai/visits')
   })();
 </script>
 
-<!-- Visible visit counter -->
-<div id="visit-counter" style="
-  position:fixed;
-  bottom:15px;
-  right:15px;
-  background:#007BFF;          /* Blue background */
-  color:white;
-  font-family:Arial, sans-serif;
-  font-size:14px;
-  padding:8px 12px;
-  border-radius:8px;
-  box-shadow:0 0 8px rgba(0,0,0,0.3);
-  z-index:9999;">
-  Visits: <span id="visit-counter-value">Loading...</span>
-</div>
 
-<script>
-(function () {
-  console.log('[counter] script loaded');
-
-  // Free API for counting visits
-  const endpoint = 'https://api.countapi.xyz/hit/horistics.ai/visits';
-
-  fetch(endpoint, { cache: 'no-store' })
-    .then(r => {
-      if (!r.ok) throw new Error('HTTP ' + r.status);
-      return r.json();
-    })
-    .then(data => {
-      console.log('[counter] visit count:', data?.value);
-      const counterElement = document.getElementById('visit-counter-value');
-      if (counterElement) {
-        counterElement.textContent = data?.value ?? 'N/A';
-      }
-    })
-    .catch(err => {
-      console.error('[counter] error:', err);
-      const counterElement = document.getElementById('visit-counter-value');
-      if (counterElement) {
-        counterElement.textContent = 'Error';
-      }
-    });
-})();
-</script>
 
 </body>
 </html>
-
