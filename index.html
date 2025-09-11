@@ -27,6 +27,7 @@
   <link rel="stylesheet" href="q.css">
 </head>
 <body>
+  <div id="visit-counter" style="display:none;"></div>
   <div class="wrap">
     <header>
       <a class="brand" aria-label="horistics.ai" href="#top">
@@ -402,6 +403,16 @@ When the focus shifts from reaction to prevention, justice becomes a living syst
 </script>
 
   </div>
+
+  <script>
+fetch('https://api.countapi.xyz/hit/horistics.ai/visits')
+  .then(response => response.json())
+  .then(data => {
+    console.log('Site visited count:', data.value); // Shows count in browser console
+    document.getElementById('visit-counter').textContent = data.value;
+  });
+</script>
+
 
   <script>
     // Year
