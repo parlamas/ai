@@ -491,22 +491,10 @@ When the focus shifts from reaction to prevention, justice becomes a living syst
   })();
 </script>
 
+<img alt="Visits"
+     src="https://visitor-badge.laobi.io/badge?page_id=horistics.ai&left_text=Visits"
+     style="position:fixed;right:15px;bottom:15px;height:28px;z-index:9999;">
 
-
-<div id="visit-counter" style="position:fixed;right:15px;bottom:15px;z-index:9999;
-  background:#007BFF;color:#fff;font:14px/1.2 system-ui,-apple-system,Segoe UI,Roboto,Arial;
-  padding:8px 12px;border-radius:8px;box-shadow:0 0 8px rgba(0,0,0,.25);">
-  Visits: <span id="visit-counter-value">…</span>
-</div>
-<script>
-(function(){
-  const span = document.getElementById('visit-counter-value');
-  const ns = 'horistics_' + (location.hostname||'local').replace(/[^\w]/g,'_');
-  fetch(`https://api.countapi.xyz/hit/${ns}/visits`, {cache:'no-store'})
-    .then(r => r.json()).then(d => span.textContent = d.value ?? 'N/A')
-    .catch(e => { console.error('counter error', e); span.textContent = 'Error'; });
-})();
-</script>
 
 
 </body>
