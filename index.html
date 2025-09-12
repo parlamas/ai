@@ -14,8 +14,6 @@
   <link rel="preload" href="styles.css" as="style">
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="q.css">
-  <meta http-equiv="Content-Security-Policy"
-      content="default-src 'self'; connect-src 'self' https://api.countapi.xyz; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:;">
 </head>
 
 <body>
@@ -493,65 +491,17 @@ When the focus shifts from reaction to prevention, justice becomes a living syst
   })();
 </script>
 
-<!-- Visible visit counter -->
-<div id="visit-counter" style="
-  position:fixed; bottom:15px; right:15px; z-index:9999;
-  background:#007BFF; color:#fff; font:14px/1.2 system-ui, -apple-system, Segoe UI, Roboto, Arial;
-  padding:8px 12px; border-radius:8px; box-shadow:0 0 8px rgba(0,0,0,.25);">
-  Visits: <span id="visit-counter-value">…</span>
-</div>
-
-<script>
-(function () {
-  const el = document.getElementById('visit-counter-value');
-
-  // 1) If opened from file://, CountAPI won't work. Fall back to localStorage counter.
-  if (location.protocol === 'file:') {
-    const k = 'local_visit_count';
-    const v = (parseInt(localStorage.getItem(k), 10) || 0) + 1;
-    localStorage.setItem(k, v);
-    el.textContent = v + ' (local)';
-    console.warn('[counter] running from file://, using localStorage fallback');
-    return;
-  }
-
-  // 2) Use a unique namespace to avoid conflicts
-  const namespace = ('horistics_ai_' + (location.hostname || 'localhost'))
-    .replace(/[^\w]/g, '_');
-  const key = 'visits';
-  const createUrl = `https://api.countapi.xyz/create?namespace=${namespace}&key=${key}&value=0`;
-  const hitUrl    = `https://api.countapi.xyz/hit/${namespace}/${key}`;
-
-  function setText(t){ if (el) el.textContent = t; }
-
-  // Small helper with timeout
-  function fetchWithTimeout(url, ms=6000) {
-    const ctrl = new AbortController();
-    const id = setTimeout(() => ctrl.abort(), ms);
-    return fetch(url, {cache:'no-store', signal: ctrl.signal})
-      .finally(() => clearTimeout(id));
-  }
-
-  // Ensure the counter exists, then increment+read
-  fetchWithTimeout(createUrl)
-    .catch(() => {}) // ignore if already exists
-    .finally(() => {
-      fetchWithTimeout(hitUrl)
-        .then(r => {
-          if (!r.ok) throw new Error('HTTP ' + r.status);
-          return r.json();
-        })
-        .then(d => setText(d && typeof d.value === 'number' ? d.value : 'N/A'))
-        .catch(err => {
-          console.error('[counter] network error:', err);
-          setText('Error');
-        });
-    });
-})();
-</script>
-
-
-
+<!-- Fixed-position visitor badge -->
+<a href="https://hits.seeyoufarm.com" target="_blank" rel="noopener" style="
+  position:fixed; right:15px; bottom:15px; z-index:9999;">
+  <img alt="visits" src="https://hits.seeyoufarm.com/api/count/incr/badge.svg
+?url=horistics.ai
+&count_bg=%23007BFF
+&title_bg=%23000000
+&icon=&icon_color=%23E7E7E7
+&title=Visits
+&edge_flat=true" style="height:28px;">
+</a>
 
 </body>
 </html>
