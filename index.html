@@ -501,14 +501,53 @@ When the focus shifts from reaction to prevention, justice becomes a living syst
 
 <script>
 (function () {
-  // Use a unique namespace to avoid clashes
-  const endpoint = 'https://api.countapi.xyz/hit/horistics_ai_12345/visits';
-  fetch(endpoint, { cache: 'no-store' })
-    .then(r => r.json())
-    .then(d => { document.getElementById('visit-counter-value').textContent = d.value ?? 'N/A'; })
-    .catch(() => { document.getElementById('visit-counter-value').textContent = 'Error'; });
+  const el = document.getElementById('visit-counter-value');
+
+  // 1) If opened from file://, CountAPI won't work. Fall back to localStorage counter.
+  if (location.protocol === 'file:') {
+    const k = 'local_visit_count';
+    const v = (parseInt(localStorage.getItem(k), 10) || 0) + 1;
+    localStorage.setItem(k, v);
+    el.textContent = v + ' (local)';
+    console.warn('[counter] running from file://, using localStorage fallback');
+    return;
+  }
+
+  // 2) Use a unique namespace to avoid conflicts
+  const namespace = ('horistics_ai_' + (location.hostname || 'localhost'))
+    .replace(/[^\w]/g, '_');
+  const key = 'visits';
+  const createUrl = `https://api.countapi.xyz/create?namespace=${namespace}&key=${key}&value=0`;
+  const hitUrl    = `https://api.countapi.xyz/hit/${namespace}/${key}`;
+
+  function setText(t){ if (el) el.textContent = t; }
+
+  // Small helper with timeout
+  function fetchWithTimeout(url, ms=6000) {
+    const ctrl = new AbortController();
+    const id = setTimeout(() => ctrl.abort(), ms);
+    return fetch(url, {cache:'no-store', signal: ctrl.signal})
+      .finally(() => clearTimeout(id));
+  }
+
+  // Ensure the counter exists, then increment+read
+  fetchWithTimeout(createUrl)
+    .catch(() => {}) // ignore if already exists
+    .finally(() => {
+      fetchWithTimeout(hitUrl)
+        .then(r => {
+          if (!r.ok) throw new Error('HTTP ' + r.status);
+          return r.json();
+        })
+        .then(d => setText(d && typeof d.value === 'number' ? d.value : 'N/A'))
+        .catch(err => {
+          console.error('[counter] network error:', err);
+          setText('Error');
+        });
+    });
 })();
 </script>
+
 
 
 
